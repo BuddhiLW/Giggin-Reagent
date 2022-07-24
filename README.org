@@ -1,0 +1,175 @@
+#+title: Readme
+
+* What
+#+begin_src clojure
+(ns giggin.test
+    (:import
+     [java.util Date UUID Calendar]
+     [java.io File]))
+#+end_src
+
+#+RESULTS:
+
+#+begin_src clojure
+(.. System (getProperties) (get "os.name"))
+#+end_src
+
+#+RESULTS:
+: Linux
+
+#+begin_src clojure
+(. java.util.Calendar AM_PM)
+#+end_src
+
+#+RESULTS:
+: 9
+
+#+begin_src clojure
+(. java.util.Calendar getInstance)
+#+end_src
+
+#+RESULTS:
+: #inst "2022-06-29T12:56:59.228-03:00"
+
+#+begin_src clojure
+(. java.util.Calendar HOUR)
+#+end_src
+
+#+RESULTS:
+: 10
+
+#+begin_src clojure
+(System/out format "Local time: %tT" )
+#+end_src
+
+#+RESULTS:
+: class clojure.lang.Compiler$CompilerException
+
+#+begin_src clojure
+(.getName System)
+#+end_src
+
+#+RESULTS:
+: java.lang.System
+
+#+begin_src clojure
+(java.lang.System.out (println "hello"))
+#+end_src
+
+#+RESULTS:
+: class clojure.lang.Compiler$CompilerException
+
+
+#+begin_src java
+System.out.format("Local time: %tT", Calendar.getInstance());
+#+end_src
+
+#+begin_src clojure :exports both :results output
+(.println (System/out) "foo")
+#+end_src
+
+#+RESULTS:
+: foo
+
+#+begin_src clojure :exports both :results output
+((fn [[x] & others] (do (println (* 3 x)) (println others))) [3] 5 6 7)
+#+end_src
+* Jargons and definition
+** Component-level state
+State which only exist at the component environment
+* Treading and (DOM) elements - note on notation
+** Class: 14-gig-editor.mp4
+*Editing [[file:src/giggin/components/gig_editor.cljs::(defn gig-editor][giggin.components.gig-editor]]*
+
+All these forms are equivalent,
+#+begin_src clojurescript
+#(.log js/console (.-value (.-target %)))
+#(.log js/console (-> %
+                    .-target
+                    .-value))
+#(.log js/console (.. %
+                      -target
+                      -value))
+
+#(.log js/console (.. % -target -value))
+#+end_src
+* Change state-and-model, with input
+#+begin_quote
+"(...) We will be using these inputs to change values in our model and save them to our state. Additionally, we will be populating these values, when we will be editing a gig (model)."
+#+end_quote
+** Change state of the model
+Example: our /editor-application/ that instantiate our =model=.
+
+*** The application
+Here, we use =values= as our core =state= for the /editor-application/.
+
+Read: [[*Next step: local-state to database-state][next step]]
+
+
+#+begin_src clojurescript
+(ns giggin.components.gig-editor)
+
+(defn gig-editor-footer [modal]
+  [:div.modal__footer
+   [:button.btn.btn--link.float--left
+    {:on-click #(reset! modal false)}
+    "Cancel"]
+   [:button.btn.btn--secondary
+    "Save"]])
+
+(defn gig-editor-body-form [{:keys [id type value values]}]
+  [:div.form__group
+   [:label.form__label {:for id } id]
+   [:input.form__input {:type      type
+                        :id        id
+                        :value     value ;;(:title @values)
+                        :on-change #(do (swap! values assoc (keyword id) (.. % -target -value))
+                                        (.log js/console (.. % -target -value)))}]])
+
+(defn gig-editor-body-form-soldout [values]
+  [:div.form__group
+   [:label.form__label {:for "sold-out"} "sold-out"]
+   [:label.form__switch
+    [:input {:type      :checkbox
+             :checked   (:sold-out @values)
+             :on-change #(swap! values assoc :sold-out (.. % -target -checked))}]
+    [:i.form__icon]]])
+
+(defn gig-editor
+  "Component responsible for bridging the user to the functionality of adding gigs to the plataform"
+  [modal values]
+  [:div.modal (when @modal {:class "active"})
+   [:div.modal__overlay]
+   [:div.modal__container
+    [:div.modal__body
+     (gig-editor-body-form {:id "title" :type "text"   :value (:title @values) :values values})
+     (gig-editor-body-form {:id "desc"  :type "text"   :value (:desc @values) :values values})
+     (gig-editor-body-form {:id "img"   :type "text"   :value (:img @values) :values values})
+     (gig-editor-body-form {:id "price" :type "number" :value (:price @values) :values values})
+     (gig-editor-body-form-soldout values)]
+    (gig-editor-footer modal)]])
+#+end_src
+*** Next step: local-state to database-state
+
+*Next step:*
+This value, called /values/, only changes locally, where it's called (e.i., at /[[file:src/giggin/components/gigs.cljs::(defn
+gigs][giggin.gig]]/).
+
+#+begin_src clojure
+(defn gigs
+  []
+  (let [modal-plus  (r/atom false)
+        modal-minus (r/atom false)
+        values (r/atom {:id nil :title "" :desc "" :img "" :price 0 :sold-out false})]
+    (fn []
+      [:main
+       [:div.gigs
+        (modal-add modal-plus)
+        (modal-remove modal-minus)
+        (gig-editor modal-plus values)
+        (for [{:keys [id img title price desc]} (vals @state/gigs)]
+          (gig id img title price desc))]])))
+#+end_src
+
+The goal, now, is to store this =local-variable= at our =local-database=. That
+is, migrate our *local-state to database-state*.
