@@ -1,6 +1,8 @@
 #+title: Readme
 
-* What
+* Description
+This is a project created for the purpouse of learning Reagent.
+* Comment What
 #+begin_src clojure
 (ns giggin.test
     (:import
