@@ -2,80 +2,80 @@
 
 * Description
 This is a project created for the purpouse of learning Reagent.
-* Comment What
-#+begin_src clojure
-(ns giggin.test
-    (:import
-     [java.util Date UUID Calendar]
-     [java.io File]))
-#+end_src
+# * Comment What
+# #+begin_src clojure
+# (ns giggin.test
+#     (:import
+#      [java.util Date UUID Calendar]
+#      [java.io File]))
+# #+end_src
 
-#+RESULTS:
+# #+RESULTS:
 
-#+begin_src clojure
-(.. System (getProperties) (get "os.name"))
-#+end_src
+# #+begin_src clojure
+# (.. System (getProperties) (get "os.name"))
+# #+end_src
 
-#+RESULTS:
-: Linux
+# #+RESULTS:
+# : Linux
 
-#+begin_src clojure
-(. java.util.Calendar AM_PM)
-#+end_src
+# #+begin_src clojure
+# (. java.util.Calendar AM_PM)
+# #+end_src
 
-#+RESULTS:
-: 9
+# #+RESULTS:
+# : 9
 
-#+begin_src clojure
-(. java.util.Calendar getInstance)
-#+end_src
+# #+begin_src clojure
+# (. java.util.Calendar getInstance)
+# #+end_src
 
-#+RESULTS:
-: #inst "2022-06-29T12:56:59.228-03:00"
+# #+RESULTS:
+# : #inst "2022-06-29T12:56:59.228-03:00"
 
-#+begin_src clojure
-(. java.util.Calendar HOUR)
-#+end_src
+# #+begin_src clojure
+# (. java.util.Calendar HOUR)
+# #+end_src
 
-#+RESULTS:
-: 10
+# #+RESULTS:
+# : 10
 
-#+begin_src clojure
-(System/out format "Local time: %tT" )
-#+end_src
+# #+begin_src clojure
+# (System/out format "Local time: %tT" )
+# #+end_src
 
-#+RESULTS:
-: class clojure.lang.Compiler$CompilerException
+# #+RESULTS:
+# : class clojure.lang.Compiler$CompilerException
 
-#+begin_src clojure
-(.getName System)
-#+end_src
+# #+begin_src clojure
+# (.getName System)
+# #+end_src
 
-#+RESULTS:
-: java.lang.System
+# #+RESULTS:
+# : java.lang.System
 
-#+begin_src clojure
-(java.lang.System.out (println "hello"))
-#+end_src
+# #+begin_src clojure
+# (java.lang.System.out (println "hello"))
+# #+end_src
 
-#+RESULTS:
-: class clojure.lang.Compiler$CompilerException
+# #+RESULTS:
+# : class clojure.lang.Compiler$CompilerException
 
 
-#+begin_src java
-System.out.format("Local time: %tT", Calendar.getInstance());
-#+end_src
+# #+begin_src java
+# System.out.format("Local time: %tT", Calendar.getInstance());
+# #+end_src
 
-#+begin_src clojure :exports both :results output
-(.println (System/out) "foo")
-#+end_src
+# #+begin_src clojure :exports both :results output
+# (.println (System/out) "foo")
+# #+end_src
 
-#+RESULTS:
-: foo
+# #+RESULTS:
+# : foo
 
-#+begin_src clojure :exports both :results output
-((fn [[x] & others] (do (println (* 3 x)) (println others))) [3] 5 6 7)
-#+end_src
+# #+begin_src clojure :exports both :results output
+# ((fn [[x] & others] (do (println (* 3 x)) (println others))) [3] 5 6 7)
+# #+end_src
 * Jargons and definition
 ** Component-level state
 State which only exist at the component environment
