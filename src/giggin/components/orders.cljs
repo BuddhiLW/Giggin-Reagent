@@ -3,7 +3,6 @@
             [giggin.helpers :refer [format-price]]
             [giggin.components.checkout-modal :refer [checkout-modal]]))
 
-
 ;; ---------
 ;; Helper functions
 ;; ---------------
@@ -23,50 +22,49 @@
 ;; ---------------
 (defn total-component [orders]
   [:div.total
-       [:hr]
-       [:div.item
-        [:div.content "Total"]
-        [:div.action
-         [:div.price (format-price (total))]]
-        [:button.btn.btn--link.tooltip
-         {:data-tooltip "Remove all"
-          :on-click     (fn [] (reset! orders {}))}
-         [:i.icon.icon--delete]]]
-       [checkout-modal]])
+   [:hr]
+   [:div.item
+    [:div.content "Total"]
+    [:div.action
+     [:div.price (format-price (total))]]
+    [:button.btn.btn--link.tooltip
+     {:data-tooltip "Remove all"
+      :on-click     (fn [] (reset! orders {}))}
+     [:i.icon.icon--delete]]]
+   [checkout-modal]])
 
 ;; ---------
 ;; Orders-component
 ;; ---------------
 
 (defn empty-orders-component []
- [:div.empty
-  [:div.title "You don't have any orders"]
-  [:div.subtitle "Click on a + to add an order"]])
+  [:div.empty
+   [:div.title "You don't have any orders"]
+   [:div.subtitle "Click on a + to add an order"]])
 
 ;; An gig-order in the sidebar component
 (defn order-item [id quant orders]
   (let [id-key (partial id-key id)]
     [:div.item {:key id}
-             [:div.img
-              [:img {:src (id-key "img")
-                     :alt (id-key "title")}]]
-             [:div.content
-              [:p.title (str (id-key "title") " \u00D7 " quant)]]
-             [:div.action
-              [:div.price (format-price (* (id-key "price") quant))]
-              [:button.bnt.btn-link.tooltip
-               {:data-tooltip "Remove"
-                :on-click     (fn [] (swap! orders dissoc id))}
-               [:i.icon.icon--cross]]]]))
+     [:div.img
+      [:img {:src (id-key "img")
+             :alt (id-key "title")}]]
+     [:div.content
+      [:p.title (str (id-key "title") " \u00D7 " quant)]]
+     [:div.action
+      [:div.price (format-price (* (id-key "price") quant))]
+      [:button.bnt.btn-link.tooltip
+       {:data-tooltip "Remove"
+        :on-click     (fn [] (swap! orders dissoc id))}
+       [:i.icon.icon--cross]]]]))
 
 ;; Gigs-orders-and-total
 (defn orders-component [orders]
   [:div.order
-     [:div.body
-      (for [[id quant] @orders]
-        (order-item id quant orders))
-      (total-component state/orders)]])
-      
+   [:div.body
+    (doall (for [[id quant] @orders]
+            (order-item id quant orders)))
+    (total-component state/orders)]])
 
 (defn orders
   []

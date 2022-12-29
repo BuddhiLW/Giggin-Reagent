@@ -27,12 +27,12 @@
   "Template for input forms. E.g., Title, Description, etc."
   [{:keys [id type value values]}]
   [:div.form__group
-   [:label.form__label {:for id } id]
+   [:label.form__label {:for id} id]
    [:input.form__input {:type      type
                         :id        id
                         :value     value ;;(:title @values)
-                        :on-change #(do (swap! values assoc (keyword id) (.. % -target -value))
-                                        (.log js/console (.. % -target -value)))}]])
+                        :on-change #(do (swap! values assoc (keyword id) (.. % -target -value)))}]])
+;;                                        (.log js/console (.. % -target -value)))}]])
 
 (defn gig-editor-body-form-soldout
   "Template for the soldout button"
@@ -40,6 +40,7 @@
   [:div.form__group
    [:label.form__label {:for "sold-out"} "sold-out"]
    [:label.form__switch
+ ;;   (.log js/console (:sold-out @values))
     [:input {:type      :checkbox
              :checked   (:sold-out @values)
              :on-change #(swap! values assoc :sold-out (.. % -target -checked))}]

@@ -1,11 +1,11 @@
 (ns giggin.core
   (:require
-        [goog.dom :as gdom]
-        [reagent.dom :as rdom]
-        [giggin.components.header :refer [header]]
-        [giggin.components.gigs :refer [gigs]]
-        [giggin.components.orders :refer [orders]]
-        [giggin.components.footer :refer [footer]]))
+   [goog.dom :as gdom]
+   [reagent.dom :as rdom]
+   [giggin.components.header :refer [header]]
+   [giggin.components.gigs :refer [gigs]]
+   [giggin.components.orders :refer [orders]]
+   [giggin.components.footer :refer [footer]]))
         ;; [reagent.core :as reagent]
 
 (defn app
@@ -51,7 +51,6 @@
 ;;   (reagent/render-component
 ;;    [app]
 ;;    (. js/document (getElementById "app"))))
-
 
 ;; (defn stop []
 ;;   ;; stop is called before any code is reloaded

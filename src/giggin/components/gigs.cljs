@@ -49,11 +49,12 @@
   =@state/gigs=."
   []
   (let [modal  (r/atom {:active false})
-        values (r/atom {:id (str "gig-" (random-uuid)) :title "" :desc "" :img "" :price 0 :sold-out false})]
+        initial-values {:id (str "gig-" (random-uuid)) :title "" :desc "" :img "" :price 0 :sold-out false}
+        values (r/atom initial-values)]
     (fn []
       [:main
        [:div.gigs
         (modal-add modal)
         (gig-editor modal values)
         (for [{:keys [id img title price desc] :as gig-data} (vals @state/gigs)]
-          (gig id img title price desc modal gig-data values))]])))
+         (gig id img title price desc modal gig-data values))]])))
